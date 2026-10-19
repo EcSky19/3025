@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Tagging at Scale</title>
+<meta name="description" content="Interactive engineering case study by Ethan Coskay: designing reliable, AI-assisted tagging across review sets of up to 5 million documents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: one reading column (~44rem) with diagrams breaking out to ~66rem; sticky section rail; spec-sheet labels in mono. */
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --ink:#14202E; --muted:#526072; --line:#D3DAE3;
+  --accent:#1F5BBF; --accent-ink:#FFFFFF; --accent-soft:#E2EBFA;
+  --ok:#1C744A; --ok-soft:#DFF2E7; --warn:#9A5600; --warn-soft:#FBEED6;
+  --dim:#B9C2CE;
+  --f-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --col:44rem; --wide:66rem; --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E141B; --surface:#151E28; --ink:#E5EBF2; --muted:#9BA9BA; --line:#283545;
+  --accent:#86ACF2; --accent-ink:#0E141B; --accent-soft:#1B2B45;
+  --ok:#6FCB99; --ok-soft:#14301F; --warn:#F1B65E; --warn-soft:#3A2B12; --dim:#3A4757;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E141B; --surface:#151E28; --ink:#E5EBF2; --muted:#9BA9BA; --line:#283545;
+  --accent:#86ACF2; --accent-ink:#0E141B; --accent-soft:#1B2B45;
+  --ok:#6FCB99; --ok-soft:#14301F; --warn:#F1B65E; --warn-soft:#3A2B12; --dim:#3A4757;
+  color-scheme:dark}
+
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--f-body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:var(--accent)}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:4px}
+.skip{position:absolute;left:-999px;top:0}
+.skip:focus{left:16px;top:16px;z-index:50;background:var(--surface);padding:.5rem .8rem}
+
+h1,h2,h3{font-family:var(--f-display);font-stretch:85%;line-height:1.1;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,6vw,3.6rem);font-weight:800;letter-spacing:-.01em}
+h2{font-size:clamp(1.6rem,3.6vw,2.2rem);font-weight:750}
+h3{font-size:1.15rem;font-weight:700;font-stretch:90%}
+p{margin:0}
+.mono,.eyebrow,.tagline{font-family:var(--f-mono)}
+.eyebrow{font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.2rem;color:var(--muted);max-width:38rem}
+
+.wrap{max-width:var(--wide);margin-inline:auto}
+.col{max-width:var(--col)}
+section{padding-block:3.5rem;border-top:1px solid var(--line);scroll-margin-top:4rem}
+.stack{display:grid;gap:1rem}
+.stack-lg{display:grid;gap:1.75rem}
+
+/* Section rail */
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 92%,transparent);
+  backdrop-filter:blur(6px);border-bottom:1px solid var(--line);margin-inline:calc(-1*max(16px,env(safe-area-inset-left,0px)))}
+.rail ol{list-style:none;margin:0 auto;padding:.55rem max(16px,env(safe-area-inset-left,0px));max-width:var(--wide);
+  display:flex;gap:.25rem;overflow-x:auto;scrollbar-width:none}
+.rail a{display:block;white-space:nowrap;text-decoration:none;color:var(--muted);font:500 .82rem var(--f-mono);
+  padding:.45rem .7rem;border-radius:999px;min-height:44px;display:flex;align-items:center}
+.rail a[aria-current="true"]{background:var(--accent-soft);color:var(--ink)}
+
+/* Hero */
+.hero{padding-block:3rem 2.5rem;display:grid;gap:1.25rem;border-top:0}
+.role{display:flex;flex-wrap:wrap;gap:.5rem 1.25rem;font:500 .85rem var(--f-mono);color:var(--muted)}
+.role b{color:var(--ink);font-weight:500}
+.scan{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem 1.4rem;display:grid;gap:.9rem}
+.scan dl{display:grid;grid-template-columns:7.5rem 1fr;gap:.6rem 1rem;margin:0}
+.scan dt{font:500 .78rem var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);padding-top:.2rem}
+.scan dd{margin:0}
+@media (max-width:520px){.scan dl{grid-template-columns:1fr}.scan dt{padding-top:0}}
+.notice{font-size:.85rem;color:var(--muted);border-left:3px solid var(--line);padding-left:.8rem;max-width:var(--col)}
+
+/* Buttons */
+.btn{font:600 .92rem var(--f-body);border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);
+  min-height:44px;padding:.5rem .95rem;cursor:pointer;display:inline-flex;align-items:center;gap:.45rem;text-decoration:none}
+.btn:hover{border-color:var(--accent)}
+.btn-primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+
+/* Figures */
+figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;display:grid;gap:.9rem;min-width:0}
+figcaption{font-size:.85rem;color:var(--muted)}
+.concept{font:500 .72rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.svgbox{overflow-x:auto}
+svg text{font-family:var(--f-mono)}
+
+/* Problem cluster */
+.cluster-ctl{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.status{font-size:.95rem}
+.doc rect{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.doc .fold{fill:var(--bg);stroke:var(--line);stroke-width:1.5}
+.doc .ln{stroke:var(--dim);stroke-width:2}
+.doc.src rect{stroke:var(--ink);stroke-width:2}
+.doc .tag{opacity:0}
+.doc .tag rect{fill:var(--accent);stroke:none}
+.doc .tag text{fill:var(--accent-ink);font-size:10px;font-weight:500}
+.doc.on .tag{opacity:1}
+.doc.on rect.page{stroke:var(--accent);stroke-width:2}
+.edge{stroke:var(--line);stroke-width:2;fill:none;stroke-dasharray:4 4}
+.edge.on{stroke:var(--accent);stroke-dasharray:none}
+.lbl{fill:var(--muted);font-size:11px}
+.lbl-strong{fill:var(--ink);font-size:12px;font-weight:500}
+@media (prefers-reduced-motion:no-preference){
+  .doc .tag,.doc rect.page,.edge{transition:opacity .35s ease,stroke .35s ease}
+}
+
+/* Scale */
+.scale{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:1.25rem;align-items:end}
+@media (max-width:640px){.scale{grid-template-columns:1fr}}
+.scale-num{font:800 clamp(1.8rem,5vw,2.6rem)/1 var(--f-display);font-stretch:80%;font-variant-numeric:tabular-nums}
+.scale-cap{font:500 .8rem var(--f-mono);color:var(--muted)}
+
+/* System map */
+.map{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:1.25rem;align-items:start}
+@media (max-width:820px){.map{grid-template-columns:1fr}}
+.flow{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.flow li{display:grid;justify-items:stretch}
+.flow li:not(:last-child)::after{content:"";justify-self:start;margin-left:1.6rem;width:2px;height:1.1rem;background:var(--line)}
+.node{width:100%;text-align:left;display:grid;grid-template-columns:2rem 1fr auto;gap:.75rem;align-items:center;
+  background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.7rem .85rem;min-height:52px;
+  font:500 .95rem var(--f-body);color:var(--ink);cursor:pointer}
+.node:hover{border-color:var(--accent)}
+.node[aria-expanded="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.node .k{font:500 .75rem var(--f-mono);color:var(--muted);text-align:center}
+.node .chev{font:500 .8rem var(--f-mono);color:var(--muted)}
+.node.fail{border-style:dashed;border-color:var(--warn)}
+.node.fail .k{color:var(--warn)}
+.branch{margin:.4rem 0 .2rem 2.6rem;display:grid;gap:.45rem;border-left:2px dashed var(--warn);padding-left:.9rem}
+.branch .eyebrow{color:var(--warn)}
+.detail{position:sticky;top:5rem;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.25rem;display:grid;gap:.85rem}
+@media (max-width:820px){.detail{position:static}}
+.detail dl{margin:0;display:grid;gap:.75rem}
+.detail dt{font:500 .75rem var(--f-mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.detail dd{margin:0}
+
+/* Decisions */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media (max-width:720px){.cards{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.2rem;display:grid;gap:.7rem;align-content:start}
+.card dl{margin:0;display:grid;gap:.55rem}
+.card dt{font:500 .72rem var(--f-mono);text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+.card dd{margin:0}
+
+/* Reliability */
+.toggle{display:inline-flex;border:1px solid var(--line);border-radius:10px;padding:4px;background:var(--surface);gap:4px}
+.toggle button{font:600 .95rem var(--f-body);min-height:44px;min-width:7rem;border:0;border-radius:7px;background:transparent;color:var(--ink);cursor:pointer;padding:.4rem .9rem}
+.toggle button[aria-checked="true"]{background:var(--ink);color:var(--bg)}
+.paths{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media (max-width:720px){.paths{grid-template-columns:1fr}}
+.path{border:1px solid var(--line);border-radius:var(--r);padding:1rem;display:grid;gap:.6rem;background:var(--surface)}
+.path ol{margin:0;padding-left:1.2rem;display:grid;gap:.35rem}
+.path .badge{justify-self:start;font:500 .75rem var(--f-mono);border-radius:999px;padding:.2rem .6rem;border:1px solid var(--line);color:var(--muted)}
+.path.active.normal{border-color:var(--ok);background:var(--ok-soft)}
+.path.active.normal .badge{border-color:var(--ok);color:var(--ok)}
+.path.active.fallback{border-color:var(--warn);background:var(--warn-soft)}
+.path.active.fallback .badge{border-color:var(--warn);color:var(--warn)}
+.path:not(.active){opacity:.55}
+.outcome{font-weight:600}
+.pull{font:750 clamp(1.3rem,3vw,1.7rem)/1.2 var(--f-display);font-stretch:85%;max-width:32rem}
+
+/* AI flow */
+.pipe{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.6rem;counter-reset:s}
+@media (max-width:820px){.pipe{grid-template-columns:1fr}}
+.pipe li{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:.85rem;display:grid;gap:.35rem;align-content:start;position:relative}
+.pipe li .mono{font-size:.75rem;color:var(--muted)}
+.pipe li b{font-family:var(--f-display);font-stretch:90%;font-size:1.02rem}
+.pipe li p{font-size:.9rem;color:var(--muted)}
+.vec{font:500 .72rem var(--f-mono);color:var(--accent);letter-spacing:.02em}
+details.deep{border:1px solid var(--line);border-radius:var(--r);background:var(--surface);padding:.2rem 1.1rem}
+details.deep summary{cursor:pointer;font-weight:600;min-height:48px;display:flex;align-items:center;gap:.5rem}
+details.deep .body{padding-bottom:1rem;display:grid;gap:.7rem}
+details.deep ul{margin:0;padding-left:1.2rem;display:grid;gap:.4rem}
+
+/* Impact */
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}
+@media (max-width:720px){.metrics{grid-template-columns:1fr}}
+.metric{border-top:3px solid var(--ink);padding-top:.8rem;display:grid;gap:.35rem}
+.metric .n{font:800 clamp(2.2rem,6vw,3.2rem)/1 var(--f-display);font-stretch:78%;font-variant-numeric:tabular-nums}
+.metric .d{color:var(--muted);font-size:.95rem}
+.metric .src{font:500 .72rem var(--f-mono);color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+/* Reflection */
+.lessons{list-style:none;margin:0;padding:0;display:grid;gap:1.4rem}
+.lessons li{display:grid;grid-template-columns:2.2rem 1fr;gap:1rem}
+.lessons .k{font:500 .8rem var(--f-mono);color:var(--muted);padding-top:.3rem}
+
+/* Closing */
+.closing{display:grid;gap:1.25rem}
+.closing .big{font:800 clamp(1.8rem,4.6vw,2.8rem)/1.1 var(--f-display);font-stretch:82%;max-width:36rem;text-wrap:balance}
+.ctas{display:flex;flex-wrap:wrap;gap:.6rem}
+footer{padding-block:2rem 3rem;border-top:1px solid var(--line);font-size:.85rem;color:var(--muted);display:grid;gap:.4rem}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to case study</a>
+
+<nav class="rail" aria-label="Case study sections">
+  <ol>
+    <li><a href="#problem">Problem</a></li>
+    <li><a href="#scale">Scale</a></li>
+    <li><a href="#system">System map</a></li>
+    <li><a href="#decisions">Decisions</a></li>
+    <li><a href="#reliability">Reliability</a></li>
+    <li><a href="#ai">AI recommendations</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#reflection">Reflection</a></li>
+  </ol>
+</nav>
+
+<main id="main" class="wrap">
+
+<!-- 1. HERO -->
+<header class="hero" id="top">
+  <p class="eyebrow">Engineering case study · Microsoft · Software Engineering Internship · Summer 2026</p>
+  <h1>Engineering AI&#8209;Assisted Tagging at&nbsp;Scale</h1>
+  <p class="lede">Designing reliable tagging workflows across review sets of up to 5&nbsp;million documents.</p>
+  <p class="role"><span><b>Ethan Coskay</b></span><span>Role: Software Engineer Intern</span><span>Stack: C# · .NET · Cosmos DB · distributed caching</span></p>
+
+  <div class="scan" aria-labelledby="scan-h">
+    <h2 id="scan-h" class="eyebrow" style="font-family:var(--f-mono);font-size:.78rem;font-weight:500">The 30-second version</h2>
+    <dl>
+      <dt>Problem</dt><dd>One reviewer decision has to apply correctly to every duplicate and related document, across millions of items.</dd>
+      <dt>What I built</dt><dd>Duplicate-aware tag propagation, a safe fallback for missing data, and AI-assisted tag recommendations, shipped behind feature flags.</dd>
+      <dt>Result</dt><dd>An estimated 1,500+ hours of manual tagging saved for users.</dd>
+    </dl>
+  </div>
+
+  <p class="notice">Simplified conceptual visualization. No proprietary Microsoft code, customer data, internal architecture, or confidential implementation details are shown. All diagrams are my own.</p>
+</header>
+
+<!-- 2. PROBLEM -->
+<section id="problem" aria-labelledby="problem-h">
+  <div class="stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">The problem</p>
+      <h2 id="problem-h">One decision, many documents</h2>
+      <p>Review sets hold large collections of documents. Many are exact duplicates, and many belong to families, like an email and its attachments. When a reviewer tags one document, that decision has to reach every related copy, or the review ends up inconsistent.</p>
+    </div>
+    <figure aria-labelledby="cluster-cap">
+      <p class="concept">Simplified conceptual representation</p>
+      <div class="cluster-ctl">
+        <button class="btn btn-primary" id="apply-tag" type="button">Apply the tag “Relevant” to one document</button>
+        <button class="btn" id="reset-tag" type="button" hidden>Reset</button>
+      </div>
+      <div class="svgbox">
+        <svg id="cluster" viewBox="0 0 720 300" width="100%" role="img" aria-labelledby="cluster-title cluster-desc" style="min-width:520px">
+          <title id="cluster-title">Document relationship cluster</title>
+          <desc id="cluster-desc">A document the reviewer tags sits in the center. Lines connect it to four exact duplicates on the left and three family members on the right. After the tag is applied, all eight documents carry the same tag.</desc>
+          <g id="edges"></g>
+          <g id="docs"></g>
+          <text x="120" y="290" text-anchor="middle" class="lbl">Exact duplicates</text>
+          <text x="360" y="290" text-anchor="middle" class="lbl-strong">Document the reviewer tags</text>
+          <text x="600" y="290" text-anchor="middle" class="lbl">Family members</text>
+        </svg>
+      </div>
+      <p class="status" id="cluster-status" role="status">Nothing tagged yet. Apply the tag to see how far one decision has to travel.</p>
+      <figcaption id="cluster-cap">Tagging one document should give its duplicates and family members the same tag, without the reviewer finding and tagging each one by hand.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 3. SCALE -->
+<section id="scale" aria-labelledby="scale-h">
+  <div class="stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">Scale</p>
+      <h2 id="scale-h">Applying a tag is easy. Keeping it correct at 5 million documents is the hard part.</h2>
+      <p>With ten documents, a mistake is visible and cheap to fix. At production scale, a small inconsistency repeats across thousands of duplicate groups, and nobody can check them by eye. Correctness has to be designed into the system.</p>
+    </div>
+    <figure aria-labelledby="scale-cap">
+      <p class="concept">Drawn to scale · each dot = 5,000 documents</p>
+      <div class="scale">
+        <div class="stack" style="gap:.5rem">
+          <svg viewBox="0 0 60 26" width="100%" style="max-width:9rem" role="img" aria-label="A ten-document test set, shown as ten squares">
+            <g id="small-grid"></g>
+          </svg>
+          <p class="scale-num">10</p>
+          <p class="scale-cap">documents in a quick local test</p>
+        </div>
+        <div class="stack" style="gap:.5rem;min-width:0">
+          <svg id="big-grid" viewBox="0 0 400 100" width="100%" role="img" aria-label="Five million documents, shown as one thousand dots, each standing for five thousand documents"></svg>
+          <p class="scale-num">5,000,000</p>
+          <p class="scale-cap">documents in the largest review sets</p>
+        </div>
+      </div>
+      <figcaption id="scale-cap">At 10 documents the whole set fits on one row of squares. At 5 million, a single dot stands for 5,000 documents, and it still takes a thousand dots.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- 4. SYSTEM MAP -->
+<section id="system" aria-labelledby="system-h">
+  <div class="stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">System map</p>
+      <h2 id="system-h">What happens between a click and a consistent result</h2>
+      <p>Each step answers a question the previous one leaves open. Select a step to see what it does and why it is there.</p>
+    </div>
+    <div class="map">
+      <div>
+        <p class="concept" style="margin-bottom:.75rem">Simplified conceptual representation</p>
+        <ol class="flow" id="flow" aria-label="Tagging workflow steps"></ol>
+        <div class="branch" aria-label="Failure path">
+          <p class="eyebrow">If duplicate data is missing or incomplete</p>
+          <button class="node fail" type="button" data-node="fallback" aria-expanded="false" aria-controls="node-detail">
+            <span class="k">↪</span><span>Deterministic fallback</span><span class="chev" aria-hidden="true">+</span></button>
+          <p style="font-size:.9rem;color:var(--muted)">The workflow continues safely instead of failing.</p>
+        </div>
+      </div>
+      <div class="detail" id="node-detail" aria-live="polite" tabindex="-1">
+        <p class="eyebrow" id="nd-step">Step 1 of 7</p>
+        <h3 id="nd-title"></h3>
+        <dl>
+          <dt>What it does</dt><dd id="nd-what"></dd>
+          <dt>Why it is there</dt><dd id="nd-why"></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. DECISIONS -->
+<section id="decisions" aria-labelledby="dec-h">
+  <div class="stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">Engineering decisions</p>
+      <h2 id="dec-h">Four decisions that shaped the system</h2>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <h3>Expand relationships before tagging</h3>
+        <dl><dt>Problem</dt><dd>A reviewer selects one item, but that item can stand for a whole document family.</dd>
+        <dt>Decision</dt><dd>Expand every selected ID into its members before any tag is written.</dd>
+        <dt>Why it mattered</dt><dd>Families are tagged as a unit, so related documents never drift apart.</dd></dl>
+      </article>
+      <article class="card">
+        <h3>Treat IDs case-insensitively</h3>
+        <dl><dt>Problem</dt><dd>The same document can arrive with identifiers that differ only in letter case.</dd>
+        <dt>Decision</dt><dd>Merge ID sets case-insensitively before propagation.</dd>
+        <dt>Why it mattered</dt><dd>No document is tagged twice or skipped because of formatting.</dd></dl>
+      </article>
+      <article class="card">
+        <h3>Fail predictably, not loudly</h3>
+        <dl><dt>Problem</dt><dd>Duplicate data can be missing or incomplete when a tag is applied.</dd>
+        <dt>Decision</dt><dd>Define a deterministic fallback path instead of letting the request error out.</dd>
+        <dt>Why it mattered</dt><dd>The reviewer's decision still completes, and downstream pipelines don't fail.</dd></dl>
+      </article>
+      <article class="card">
+        <h3>Ship behind feature flags</h3>
+        <dl><dt>Problem</dt><dd>A change to tagging behavior affects live reviews immediately.</dd>
+        <dt>Decision</dt><dd>Gate the feature with flighting so it can be turned on gradually.</dd>
+        <dt>Why it mattered</dt><dd>Controlled rollout, and rollback without downtime if something looks wrong.</dd></dl>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 6. RELIABILITY -->
+<section id="reliability" aria-labelledby="rel-h">
+  <div class="stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">Reliability</p>
+      <h2 id="rel-h">What if the data isn't there?</h2>
+      <p>Switch the input and compare the two paths.</p>
+    </div>
+    <figure aria-labelledby="rel-cap">
+      <p class="concept">Simplified conceptual representation</p>
+      <div class="stack" style="gap:.5rem">
+        <p id="rel-q" style="font-weight:600">Is duplicate data available for the tagged document?</p>
+        <div class="toggle" role="radiogroup" aria-labelledby="rel-q" id="rel-toggle">
+          <button type="button" role="radio" aria-checked="true" data-v="yes" tabindex="0">Yes</button>
+          <button type="button" role="radio" aria-checked="false" data-v="no" tabindex="-1">No</button>
+        </div>
+      </div>
+      <div class="paths">
+        <div class="path normal active" id="path-normal">
+          <span class="badge" id="badge-normal">✓ Active path</span>
+          <h3>Normal resolution</h3>
+          <ol><li>Look up duplicate groups</li><li>Merge related IDs</li><li>Propagate the tag to every copy</li></ol>
+          <p class="outcome">Result: consistent tags across the group.</p>
+        </div>
+        <div class="path fallback" id="path-fallback">
+          <span class="badge" id="badge-fallback">Not used</span>
+          <h3>Deterministic fallback</h3>
+          <ol><li>Detect incomplete duplicate data</li><li>Take the defined fallback path</li><li>Tagging continues</li></ol>
+          <p class="outcome">Result: the workflow is preserved and nothing downstream fails.</p>
+        </div>
+      </div>
+      <p role="status" id="rel-status" class="sr">Duplicate data available. Normal resolution path is active.</p>
+      <figcaption id="rel-cap">Both paths end in a usable result. The difference is whether propagation can run, not whether the reviewer's work survives.</figcaption>
+    </figure>
+    <p class="pull">Reliable systems are designed for imperfect inputs.</p>
+  </div>
+</section>
+
+<!-- 7. AI -->
+<section id="ai" aria-labelledby="ai-h">
+  <div class="stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">AI-assisted recommendations</p>
+      <h2 id="ai-h">From one document to a suggested tag</h2>
+      <p>Propagation handles copies. Recommendations help with documents that are similar but not identical, by suggesting tags that related content already carries.</p>
+    </div>
+    <figure aria-labelledby="ai-cap">
+      <p class="concept">Simplified conceptual representation</p>
+      <ol class="pipe">
+        <li><span class="mono">input</span><b>Document</b><p>A document in the review set.</p></li>
+        <li><span class="mono">represent</span><b>Embedding</b><p>Its content becomes a vector.</p><span class="vec" aria-hidden="true">[0.12, −0.48, 0.91, …]</span></li>
+        <li><span class="mono">search</span><b>Similarity</b><p>Find the documents whose vectors sit closest.</p></li>
+        <li><span class="mono">context</span><b>Related content</b><p>See which tags those neighbors carry.</p></li>
+        <li><span class="mono">output</span><b>Tag recommendation</b><p>Suggest those tags for this document.</p></li>
+      </ol>
+      <figcaption id="ai-cap">Each stage narrows the question, from “what is this document?” to “what would a reviewer likely tag it?”</figcaption>
+    </figure>
+    <details class="deep">
+      <summary><span aria-hidden="true">＋</span> Engineering detail: keeping it fast at scale</summary>
+      <div class="body">
+        <ul>
+          <li>I integrated an embedding service and similarity orchestration into the tagging workflow.</li>
+          <li>The pipeline is backed by Cosmos DB, with cache-based embedding reuse so a document's vector doesn't have to be recomputed each time it is needed.</li>
+          <li>Computing embeddings is the expensive step, so reuse is what keeps recommendations practical across review sets of millions of documents.</li>
+        </ul>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- 8. IMPACT -->
+<section id="impact" aria-labelledby="impact-h">
+  <div class="stack-lg">
+    <div class="col stack">
+      <p class="eyebrow">Impact</p>
+      <h2 id="impact-h">What it changed for reviewers</h2>
+    </div>
+    <div class="metrics">
+      <div class="metric"><p class="n">5M</p><p class="d">documents in the largest review sets the feature supports</p><p class="src">Scale</p></div>
+      <div class="metric"><p class="n">1,500+</p><p class="d">hours of manual tagging saved for users</p><p class="src">Estimate</p></div>
+      <div class="metric"><p class="n">1 → all</p><p class="d">one reviewer decision applied across every duplicate copy</p><p class="src">Behavior</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. REFLECTION -->
+<section id="reflection" aria-labelledby="ref-h">
+  <div class="col stack-lg">
+    <div class="stack">
+      <p class="eyebrow">Reflection</p>
+      <h2 id="ref-h">What this project changed about how I engineer</h2>
+    </div>
+    <ol class="lessons">
+      <li><span class="k">01</span><div class="stack" style="gap:.3rem"><h3>Think in systems</h3><p>A feature doesn't stop at its own code. It touches data, dependencies, failures, users, and the workflows that run after it.</p></div></li>
+      <li><span class="k">02</span><div class="stack" style="gap:.3rem"><h3>Design for imperfect inputs</h3><p>Production data is sometimes missing or inconsistent. A system has to stay predictable when its assumptions fail.</p></div></li>
+      <li><span class="k">03</span><div class="stack" style="gap:.3rem"><h3>Measure engineering through impact</h3><p>Engineering quality matters because of what it lets users do, like finishing a review without tagging the same email over and over.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 10. CLOSING -->
+<section id="closing" aria-labelledby="close-h" class="closing">
+  <h2 id="close-h" class="sr">Closing</h2>
+  <p class="big">Engineering is not just writing code. It is turning complexity into reliable outcomes.</p>
+  <div class="ctas">
+    <a class="btn btn-primary" href="https://github.com/EcSky19" target="_blank" rel="noopener">Explore more projects</a>
+    <a class="btn" href="https://linkedin.com/in/ethan-coskay" target="_blank" rel="noopener">Connect on LinkedIn</a>
+    <a class="btn" href="#top">Back to top</a>
+  </div>
+  <p style="color:var(--muted)">Contact: <span class="mono" style="user-select:all">enc33@cornell.edu</span></p>
+</section>
+
+<footer>
+  <p>Case study by Ethan Coskay, Cornell Engineering, B.S. Computer Science, minor in Artificial Intelligence.</p>
+  <p>Diagrams are original, simplified conceptual representations. Product and system names are generalized to protect confidential details.</p>
+</footer>
+</main>
+
+<script>
+(() => {
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- Problem cluster ---------- */
+const NS = 'http://www.w3.org/2000/svg';
+const el = (n, a={}, p) => { const e = document.createElementNS(NS, n); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const docsG = document.getElementById('docs'), edgesG = document.getElementById('edges');
+const src = {x:360, y:140, kind:'src'};
+const others = [
+  {x:90,y:50},{x:160,y:110},{x:90,y:170},{x:160,y:230},   // duplicates
+  {x:570,y:60},{x:630,y:140},{x:570,y:220}                // family
+];
+const edges = others.map(o => el('path', {class:'edge', d:`M${src.x} ${src.y} L${o.x} ${o.y}`}, edgesG));
+function drawDoc(d, isSrc){
+  const g = el('g', {class:'doc'+(isSrc?' src':''), transform:`translate(${d.x-22} ${d.y-28})`}, docsG);
+  el('rect', {class:'page', x:0, y:0, width:44, height:56, rx:4}, g);
+  el('path', {class:'fold', d:'M32 0 L44 12 L32 12 Z'}, g);
+  [16,24,32,40].forEach(y => el('line', {class:'ln', x1:8, x2:y===40?26:36, y1:y, y2:y}, g));
+  const t = el('g', {class:'tag', transform:'translate(-8 46)'}, g);
+  el('rect', {x:0, y:0, width:60, height:16, rx:8}, t);
+  const tx = el('text', {x:30, y:11.5, 'text-anchor':'middle'}, t); tx.textContent = '# Relevant';
+  return g;
+}
+const srcG = drawDoc(src, true);
+const otherG = others.map(o => drawDoc(o, false));
+const applyB = document.getElementById('apply-tag'), resetB = document.getElementById('reset-tag'), cStat = document.getElementById('cluster-status');
+let timers = [];
+applyB.addEventListener('click', () => {
+  applyB.disabled = true; srcG.classList.add('on');
+  cStat.textContent = 'Tag applied to the selected document. Propagating to related documents…';
+  const step = reduced ? 0 : 140;
+  otherG.forEach((g,i) => timers.push(setTimeout(() => { edges[i].classList.add('on'); g.classList.add('on'); }, step*(i+1))));
+  timers.push(setTimeout(() => {
+    cStat.textContent = 'Done: 1 reviewer decision, 8 documents tagged consistently (4 duplicates and 3 family members, plus the original).';
+    resetB.hidden = false; resetB.focus();
+  }, step*(otherG.length+1)));
+});
+resetB.addEventListener('click', () => {
+  timers.forEach(clearTimeout); timers = [];
+  [srcG, ...otherG].forEach(g => g.classList.remove('on')); edges.forEach(e => e.classList.remove('on'));
+  resetB.hidden = true; applyB.disabled = false; applyB.focus();
+  cStat.textContent = 'Nothing tagged yet. Apply the tag to see how far one decision has to travel.';
+});
+
+/* ---------- Scale grids ---------- */
+const sg = document.getElementById('small-grid');
+for (let i=0;i<10;i++) el('rect', {x:(i%5)*12+1, y:Math.floor(i/5)*12+1, width:9, height:9, rx:1.5, fill:'var(--ink)'}, sg);
+const bg = document.getElementById('big-grid');
+for (let i=0;i<1000;i++){ const c=i%50, r=Math.floor(i/50); el('circle', {cx:4+c*8, cy:4+r*4.9, r:1.6, fill:'var(--ink)'}, bg); }
+bg.setAttribute('viewBox','0 0 400 100');
+
+/* ---------- System map ---------- */
+const NODES = [
+  {id:'tag', t:'Reviewer applies a tag', what:'A reviewer tags one or more documents in a review set.', why:'This is the only moment a human decides. Everything after it has to honor that decision exactly.'},
+  {id:'req', t:'Tagging request by document ID', what:'The selection becomes a request that names documents by ID.', why:'IDs give every later step a precise, stable way to refer to documents.'},
+  {id:'expand', t:'Expand nested IDs', what:'IDs that stand for document families are expanded into their individual members.', why:'Without expansion, an attachment could be left untagged while its parent email is tagged.'},
+  {id:'resolve', t:'Resolve duplicate groups', what:'For each document, look up the group of exact duplicates it belongs to.', why:'This is where one decision becomes many. It is also where missing data can appear, so it has a fallback.'},
+  {id:'merge', t:'Merge IDs case-insensitively', what:'Combine all the IDs into one set, treating IDs that differ only in letter case as the same.', why:'Prevents double-handling or skipped documents caused by formatting differences.'},
+  {id:'prop', t:'Propagate the tag', what:'Apply the reviewer’s tag across the whole merged set.', why:'The reviewer tags once instead of finding and tagging every copy by hand.'},
+  {id:'done', t:'Consistent tagging result', what:'Every duplicate and family member carries the same tag.', why:'Consistency is the actual requirement. A fast but inconsistent result would create review errors.'}
+];
+const FALLBACK = {id:'fallback', t:'Deterministic fallback', what:'When duplicate data is missing or incomplete, the workflow takes a defined fallback path instead of erroring out.', why:'The reviewer’s tagging still completes predictably, and downstream pipelines don’t fail because one input was imperfect.'};
+const flow = document.getElementById('flow');
+NODES.forEach((n,i) => {
+  const li = document.createElement('li');
+  li.innerHTML = `<button class="node" type="button" data-node="${n.id}" aria-expanded="false" aria-controls="node-detail"><span class="k">${String(i+1).padStart(2,'0')}</span><span></span><span class="chev" aria-hidden="true">+</span></button>`;
+  li.querySelector('span:nth-child(2)').textContent = n.t;
+  flow.appendChild(li);
+});
+const all = [...NODES, FALLBACK];
+const ndStep = document.getElementById('nd-step'), ndT = document.getElementById('nd-title'), ndW = document.getElementById('nd-what'), ndY = document.getElementById('nd-why');
+function select(id){
+  const n = all.find(x => x.id===id), i = NODES.indexOf(n);
+  document.querySelectorAll('.node').forEach(b => { const on = b.dataset.node===id; b.setAttribute('aria-expanded', on); b.querySelector('.chev').textContent = on ? '−' : '+'; });
+  ndStep.textContent = i>=0 ? `Step ${i+1} of ${NODES.length}` : 'Failure path';
+  ndT.textContent = n.t; ndW.textContent = n.what; ndY.textContent = n.why;
+}
+document.querySelectorAll('.node').forEach(b => b.addEventListener('click', () => select(b.dataset.node)));
+select('resolve');
+
+/* ---------- Reliability toggle ---------- */
+const tg = document.getElementById('rel-toggle'), radios = [...tg.querySelectorAll('[role=radio]')];
+const pN = document.getElementById('path-normal'), pF = document.getElementById('path-fallback');
+const bN = document.getElementById('badge-normal'), bF = document.getElementById('badge-fallback'), rs = document.getElementById('rel-status');
+function setRel(v, focus){
+  radios.forEach(r => { const on = r.dataset.v===v; r.setAttribute('aria-checked', on); r.tabIndex = on?0:-1; if (on && focus) r.focus(); });
+  const yes = v==='yes';
+  pN.classList.toggle('active', yes); pF.classList.toggle('active', !yes);
+  bN.textContent = yes ? '✓ Active path' : 'Not used'; bF.textContent = yes ? 'Not used' : '↪ Active path';
+  rs.textContent = yes ? 'Duplicate data available. Normal resolution path is active.' : 'Duplicate data missing. Deterministic fallback path is active, and tagging continues.';
+}
+radios.forEach(r => {
+  r.addEventListener('click', () => setRel(r.dataset.v));
+  r.addEventListener('keydown', e => {
+    if (['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key)) { e.preventDefault(); setRel(r.dataset.v==='yes'?'no':'yes', true); }
+  });
+});
+
+/* ---------- Section rail ---------- */
+// Active section = the last one whose top has passed just below the rail.
+// A clicked link stays highlighted until its scroll finishes, so short sections near the end aren't skipped.
+const rail = document.querySelector('.rail');
+const links = [...document.querySelectorAll('.rail a')];
+const secs = links.map(a => document.querySelector(a.getAttribute('href')));
+let current = -1, lockUntil = 0;
+function setActive(i){
+  if (i === current) return;
+  current = i;
+  links.forEach((a, j) => j === i ? a.setAttribute('aria-current','true') : a.removeAttribute('aria-current'));
+  const a = links[i];
+  if (a) { const ol = a.parentElement.parentElement; ol.scrollLeft = a.offsetLeft - (ol.clientWidth - a.offsetWidth) / 2; }
+}
+function fromScroll(){
+  if (Date.now() < lockUntil) return;
+  const line = rail.getBoundingClientRect().bottom + 24;
+  let idx = -1;
+  secs.forEach((s, i) => { if (s && s.getBoundingClientRect().top <= line) idx = i; });
+  setActive(idx);
+}
+links.forEach((a, i) => a.addEventListener('click', () => { setActive(i); lockUntil = Date.now() + 1200; }));
+let ticking = false;
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; fromScroll(); }); } }, {passive:true});
+addEventListener('scrollend', () => { lockUntil = 0; });
+addEventListener('wheel', () => { lockUntil = 0; }, {passive:true});
+addEventListener('touchstart', () => { lockUntil = 0; }, {passive:true});
+fromScroll();
+})();
+</script>
+
+</body>
+</html>
