@@ -15,7 +15,7 @@ My professional portfolio website for Cornell's ENGRC 3025: Creating & Communica
 | [Hackathons/Awards](https://3025.mingly.ai/hackathons-awards/) | OneCompute, 3rd place of 1,200+ at the Microsoft Intern Week Hackathon |
 | [Leadership](https://3025.mingly.ai/leadership/) | CS 1110 teaching assistant, Selander Center program, Cornell XR, Alpha Sigma Phi |
 | [Projects](https://3025.mingly.ai/projects/) | Filterable case studies |
-| [Work Experience](https://3025.mingly.ai/work-experience/) | Microsoft, Davidson Kempner, LinkedIn and Helmes: problem, what I owned, result |
+| [Work Experience](https://3025.mingly.ai/work-experience/) | Microsoft, Davidson Kempner, the LinkedIn–Cornell Bowers CIS joint program and Helmes: problem, what I owned, result |
 
 ### Case studies
 
