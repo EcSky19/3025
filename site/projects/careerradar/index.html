@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CareerRadar · Ethan Coskay</title>
+<meta name="description" content="Case study: CareerRadar, a live job-monitoring platform that scans 150+ career pages daily and scores postings 0–100 against a candidate&#x27;s profile.">
+<link rel="canonical" href="https://3025.mingly.ai/projects/careerradar/">
+<meta property="og:title" content="CareerRadar · Ethan Coskay">
+<meta property="og:description" content="Case study: CareerRadar, a live job-monitoring platform that scans 150+ career pages daily and scores postings 0–100 against a candidate&#x27;s profile.">
+<meta property="og:image" content="https://3025.mingly.ai/assets/og.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="bar">
+    <a class="brand" href="/" aria-label="Ethan Coskay, home"><b>ETHAN COSKAY</b><span>Computer Science + AI</span></a>
+    <nav class="nav" id="site-nav" aria-label="Main"><a href="/about/">About</a><a href="/certificates/">Certificates</a><a href="/cornell-xr/">Cornell XR</a><a href="/hackathons-awards/">Hackathons/Awards</a><a href="/leadership/">Leadership</a><a href="/projects/" aria-current="page">Projects</a><a href="/work-experience/">Work Experience</a></nav>
+    <a class="btn btn-primary" href="/assets/Ethan_Coskay_Resume.pdf">Resume</a>
+    <button class="btn menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+  </div>
+</header>
+<main id="main" class="wrap">
+
+<header class="page-head col">
+  <p class="eyebrow">Personal project · Live product</p>
+  <h1>CareerRadar</h1>
+  <p class="lede">Automated job monitoring for new-grad and entry-level candidates. It watches 150+ company career pages every day and ranks new postings against your profile.</p>
+  <div class="ctas"><a class="btn btn-primary" href="https://careerradar.mingly.ai/login" rel="noopener">Open the live app</a><a class="btn" href="https://github.com/EcSky19/CareerRadar" rel="noopener">View on GitHub</a></div>
+</header>
+
+<section aria-labelledby="cr-p">
+  <div class="stack-lg">
+    <div class="facts">
+      <div class="fact"><p class="n">150+</p><p class="d">company career pages monitored</p></div>
+      <div class="fact"><p class="n">3</p><p class="d">kinds of job sources combined</p></div>
+      <div class="fact"><p class="n">0–100</p><p class="d">match score for every posting</p></div>
+      <div class="fact"><p class="n">~5</p><p class="d">paid API calls per scan</p></div>
+    </div>
+    <div class="col stack-sm"><p class="eyebrow">The problem</p><h2 id="cr-p">New-grad roles go fast, and they're scattered</h2>
+      <p>Openings appear on dozens of separate career systems and job boards. Checking them by hand every day is slow, and the best roles fill before you see them.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="cr-a">
+  <div class="stack-lg">
+    <div class="col stack-sm"><p class="eyebrow">Architecture</p><h2 id="cr-a">From many sources to one ranked list</h2></div>
+    <figure>
+      <p class="concept">Simplified conceptual representation</p>
+      <ol class="flow" aria-label="CareerRadar pipeline"><li>ATS adapters + GitHub lists + job boards</li><li>Ingest daily</li><li>Keep target companies</li><li>Score 0–100 per profile</li><li>Ranked matches</li></ol>
+      <figcaption>Free, real-time sources come first; the paid job-board search only fills gaps, which keeps running costs minimal.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section aria-labelledby="cr-s">
+  <div class="stack-lg">
+    <div class="col stack-sm"><p class="eyebrow">How it works</p><h2 id="cr-s">Select a part of the system</h2></div>
+    <div class="picker" data-picker="ats">
+  <ol class="picks"><li><button class="pick" type="button" data-id="ats" aria-expanded="false" aria-controls="pd-ats"><span class="k">01</span><span>Direct ATS adapters</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="gh" aria-expanded="false" aria-controls="pd-ats"><span class="k">02</span><span>Community GitHub lists</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="js" aria-expanded="false" aria-controls="pd-ats"><span class="k">03</span><span>Job-board search</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="score" aria-expanded="false" aria-controls="pd-ats"><span class="k">04</span><span>Match scoring</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="profiles" aria-expanded="false" aria-controls="pd-ats"><span class="k">05</span><span>Profiles and target companies</span><span class="chev" aria-hidden="true">+</span></button></li></ol>
+  <div class="detail" id="pd-ats" aria-live="polite">
+    <p class="eyebrow" data-f="step"></p>
+    <h3 data-f="title"></h3>
+    <dl class="kv"><dt>What it does</dt><dd data-f="a"></dd><dt>Why it matters</dt><dd data-f="b"></dd></dl>
+  </div>
+  <script type="application/json">[{"id": "ats", "k": "01", "title": "Direct ATS adapters", "step": "Source \u00b7 real time", "a": "Reads postings straight from Greenhouse, Lever, Ashby and Workday career systems.", "b": "Postings arrive as soon as a company publishes them, at no API cost."}, {"id": "gh", "k": "02", "title": "Community GitHub lists", "step": "Source \u00b7 daily", "a": "Pulls curated new-grad and internship lists, such as SimplifyJobs' New-Grad-Positions.", "b": "Catches roles at companies whose career systems have no adapter yet."}, {"id": "js", "k": "03", "title": "Job-board search", "step": "Source \u00b7 daily", "a": "Runs a few broad queries across LinkedIn, Indeed, Glassdoor and ZipRecruiter, then keeps only monitored companies.", "b": "Wide coverage on a tight budget: about 5 API calls per scan."}, {"id": "score", "k": "04", "title": "Match scoring", "step": "Pipeline", "a": "Scores each posting from 0 to 100 against a career profile's titles, keywords and locations.", "b": "Turns hundreds of postings into a short, ranked list worth reading."}, {"id": "profiles", "k": "05", "title": "Profiles and target companies", "step": "Pipeline", "a": "Each user keeps several career profiles and a list of target companies.", "b": "One person can track backend roles and data roles separately without the matches blurring together."}]</script>
+</div>
+  </div>
+</section>
+
+<section aria-labelledby="cr-t">
+  <div class="stack-lg">
+    <h2 id="cr-t">Built with</h2>
+    <div class="grid-3">
+      <div class="card"><p class="eyebrow">Frontend</p><ul class="chips"><li>Next.js 14</li><li>TypeScript</li><li>Tailwind CSS</li></ul></div>
+      <div class="card"><p class="eyebrow">Backend</p><ul class="chips"><li>FastAPI</li><li>Python</li><li>Async SQLAlchemy</li></ul></div>
+      <div class="card"><p class="eyebrow">Data and hosting</p><ul class="chips"><li>PostgreSQL</li><li>Supabase auth</li><li>Self-hosted on Hetzner</li></ul></div>
+    </div>
+    <div class="grid-2">
+      <div class="card"><span class="badge ok">Live</span><h3>Monitoring, matching, profiles</h3><p class="muted">Daily monitoring, match scoring, multiple career profiles and target-company management.</p></div>
+      <div class="card"><span class="badge warn">Coming next</span><h3>Resume optimization and application tracker</h3><p class="muted">Tailoring a resume to a posting, and tracking applications in one place.</p></div>
+    </div>
+  </div>
+</section>
+
+</main>
+<footer class="site-foot">
+  <div class="in">
+    <div class="stack-sm">
+      <p><b>Ethan Coskay</b> · Cornell Engineering, B.S. Computer Science, minor in Artificial Intelligence · May 2027</p>
+      <p>Email <span class="mono" id="foot-email" style="user-select:all">enc33@cornell.edu</span> <button class="copy" type="button" data-copy="enc33@cornell.edu" data-target="#foot-email">Copy</button></p>
+    </div>
+    <div class="links">
+      <a href="/assets/Ethan_Coskay_Resume.pdf">Resume (PDF)</a>
+      <a href="https://github.com/EcSky19" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/ethan-coskay/" rel="noopener">LinkedIn</a>
+      <a href="/projects/">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

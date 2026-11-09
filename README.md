@@ -20,6 +20,7 @@ My professional portfolio website for Cornell's ENGRC 3025: Creating & Communica
 ### Case studies
 
 - **[Engineering AI-Assisted Tagging at Scale](https://3025.mingly.ai/projects/tagging-at-scale/)** (Multimodal Content 1): an interactive case study of my Microsoft internship work on duplicate-aware tagging across review sets of up to 5 million documents. It includes a tag-propagation demo, a clickable system map, and a reliability toggle showing the fallback path when data is missing.
+- **[CareerRadar](https://3025.mingly.ai/projects/careerradar/)**: a live job-monitoring platform ([app](https://careerradar.mingly.ai/login), [code](https://github.com/EcSky19/CareerRadar)) that scans 150+ career pages daily and scores new postings 0–100 against a candidate's profile.
 - **[Investment Intelligence System](https://3025.mingly.ai/projects/investment-intelligence/)**: six analysis engines whose evidence is reconciled, not averaged, into explainable research.
 - **[OneCompute](https://3025.mingly.ai/projects/onecompute/)**: an opt-in compute network built from idle devices, with a step-through of a job's lifecycle.
 
