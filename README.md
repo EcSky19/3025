@@ -39,13 +39,3 @@ site/              The website (plain HTML, CSS and JavaScript, no build step)
   projects/        Case studies
 install.sh         Publishes the site on the server
 ```
-
-## Publishing
-
-On the server, as root:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/EcSky19/3025/main/install.sh | bash
-```
-
-It downloads this repo, installs the site, configures nginx and HTTPS for `3025.mingly.ai`, and checks that the pages respond. The earlier `/MC1` link redirects to the tagging case study.
