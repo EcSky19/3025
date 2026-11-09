@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Work Experience · Ethan Coskay</title>
+<meta name="description" content="Ethan Coskay&#x27;s software engineering internships at Microsoft, Davidson Kempner, LinkedIn and Helmes: problems, ownership and results.">
+<link rel="canonical" href="https://3025.mingly.ai/work-experience/">
+<meta property="og:title" content="Work Experience · Ethan Coskay">
+<meta property="og:description" content="Ethan Coskay&#x27;s software engineering internships at Microsoft, Davidson Kempner, LinkedIn and Helmes: problems, ownership and results.">
+<meta property="og:image" content="https://3025.mingly.ai/assets/og.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="bar">
+    <a class="brand" href="/" aria-label="Ethan Coskay, home"><b>ETHAN COSKAY</b><span>Computer Science + AI</span></a>
+    <nav class="nav" id="site-nav" aria-label="Main"><a href="/about/">About</a><a href="/certificates/">Certificates</a><a href="/cornell-xr/">Cornell XR</a><a href="/hackathons-awards/">Hackathons/Awards</a><a href="/leadership/">Leadership</a><a href="/projects/">Projects</a><a href="/work-experience/" aria-current="page">Work Experience</a></nav>
+    <a class="btn btn-primary" href="/assets/Ethan_Coskay_Resume.pdf">Résumé</a>
+    <button class="btn menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+  </div>
+</header>
+<main id="main" class="wrap">
+
+<header class="page-head col">
+  <p class="eyebrow">Work Experience</p>
+  <h1>Production ownership at four companies</h1>
+  <p class="lede">Each role below shows the problem, what I personally owned, and what changed because of it. The flow line is a simplified sketch of the work, not internal architecture.</p>
+</header>
+<section aria-label="Roles, newest first" style="border-top:0;padding-top:0">
+  <ol class="timeline"><li class="role">
+  <p class="when">Jun – Aug 2026<br>Redmond, WA</p>
+  <article class="card">
+    <p class="eyebrow">Software Engineer Intern</p>
+    <h2 style="font-size:1.5rem">Microsoft</h2>
+    <ol class="flow" aria-label="Microsoft work, step by step"><li>Tag</li><li>Expand IDs</li><li>Resolve duplicates</li><li>Propagate</li><li>Consistent result</li></ol>
+    <dl><dt>Problem</dt><dd>One reviewer&#x27;s tag had to reach every duplicate and related document in review sets of up to 5 million items.</dd><dt>What I owned</dt><dd>Duplicate-aware tag propagation, a deterministic fallback for missing data, AI-assisted tag recommendations, and a feature-flagged rollout.</dd><dt>Result</dt><dd>An estimated 1,500+ hours of manual tagging saved for users.</dd></dl>
+    <ul class="chips"><li>C#</li><li>.NET</li><li>Cosmos DB</li><li>Distributed caching</li><li>MSTest/Moq</li></ul>
+    <p><a class="btn btn-primary" href="/projects/tagging-at-scale/">Read the case study</a></p>
+  </article>
+</li><li class="role">
+  <p class="when">May 2025 – May 2026<br>New York, NY</p>
+  <article class="card">
+    <p class="eyebrow">Software Engineer Intern</p>
+    <h2 style="font-size:1.5rem">Davidson Kempner Capital Management</h2>
+    <ol class="flow" aria-label="Davidson Kempner Capital Management work, step by step"><li>T4 templates</li><li>Code generator</li><li>Typed Python client</li><li>REST APIs + data</li></ol>
+    <dl><dt>Problem</dt><dd>Python developers needed typed, direct access to REST APIs and backend data without hand-writing boilerplate.</dd><dt>What I owned</dt><dd>A code generator from T4 templates, a full client-server layer with a custom JSON deserializer and HTTP client, and a topic-routing configuration service.</dd><dt>Result</dt><dd>5,000+ lines of manual boilerplate eliminated per code-generation cycle; custom code sections survive regeneration.</dd></dl>
+    <ul class="chips"><li>C#</li><li>Python</li><li>T4</li><li>REST APIs</li><li>JSON</li><li>System design</li></ul>
+    
+  </article>
+</li><li class="role">
+  <p class="when">Sep 2024 – May 2025<br>Ithaca, NY</p>
+  <article class="card">
+    <p class="eyebrow">Software Engineer Intern</p>
+    <h2 style="font-size:1.5rem">LinkedIn</h2>
+    <ol class="flow" aria-label="LinkedIn work, step by step"><li>Design</li><li>React components</li><li>Integration</li><li>Live MVP demo</li></ol>
+    <dl><dt>Problem</dt><dd>A LinkedIn-style homepage prototype needed interactive features built to match design intent, on schedule.</dd><dt>What I owned</dt><dd>Interactive front-end components, including modal-based interactions and video integration, built with a cross-functional design team.</dd><dt>Result</dt><dd>A polished MVP presented live at LinkedIn&#x27;s NYC headquarters.</dd></dl>
+    <ul class="chips"><li>React</li><li>Ant Design</li><li>JavaScript</li><li>TypeScript</li></ul>
+    
+  </article>
+</li><li class="role">
+  <p class="when">Jun – Aug 2024<br>Vilnius, Lithuania</p>
+  <article class="card">
+    <p class="eyebrow">Software Engineer Intern</p>
+    <h2 style="font-size:1.5rem">Helmes</h2>
+    <ol class="flow" aria-label="Helmes work, step by step"><li>.NET 6</li><li>Audit dependencies</li><li>Migrate</li><li>.NET 8</li></ol>
+    <dl><dt>Problem</dt><dd>The NitroGeo API ran on an aging .NET version, and its client data was hard to analyze.</dd><dt>What I owned</dt><dd>The .NET 6 to .NET 8 migration, a dependency and NuGet compatibility audit, and geographic clustering of client data in SQLite.</dd><dt>Result</dt><dd>Migrated with zero breaking changes, extending the API&#x27;s supported lifecycle.</dd></dl>
+    <ul class="chips"><li>C#</li><li>.NET 6/8</li><li>SQLite</li><li>NuGet</li></ul>
+    
+  </article>
+</li></ol>
+</section>
+<p class="notice">Descriptions are generalized to protect each employer's confidential details.</p>
+
+</main>
+<footer class="site-foot">
+  <div class="in">
+    <div class="stack-sm">
+      <p><b>Ethan Coskay</b> · Cornell Engineering, B.S. Computer Science, minor in Artificial Intelligence · May 2027</p>
+      <p>Email <span class="mono" id="foot-email" style="user-select:all">enc33@cornell.edu</span> <button class="copy" type="button" data-copy="enc33@cornell.edu" data-target="#foot-email">Copy</button></p>
+    </div>
+    <div class="links">
+      <a href="/assets/Ethan_Coskay_Resume.pdf">Résumé (PDF)</a>
+      <a href="https://github.com/EcSky19" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/ethan-coskay/" rel="noopener">LinkedIn</a>
+      <a href="/projects/">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

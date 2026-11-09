@@ -1,3 +1,3 @@
-# ENGRC 3025 · Multimodal Content 1
+# Ethan Coskay · Professional Website
 
-An interactive case study for Cornell's ENGRC 3025 showing how I engineered reliable, AI-assisted document tagging at scale during my Microsoft internship. Live at https://3025.mingly.ai/MC1
+My professional portfolio website for Cornell's ENGRC 3025, including the Multimodal Content 1 case study on engineering AI-assisted document tagging at scale. Live at https://3025.mingly.ai

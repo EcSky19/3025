@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cornell XR · Ethan Coskay</title>
+<meta name="description" content="Ethan Coskay&#x27;s work as Software Lead on Cornell XR: smart-glasses OCR to LaTeX, and evidence-based face-match thresholds.">
+<link rel="canonical" href="https://3025.mingly.ai/cornell-xr/">
+<meta property="og:title" content="Cornell XR · Ethan Coskay">
+<meta property="og:description" content="Ethan Coskay&#x27;s work as Software Lead on Cornell XR: smart-glasses OCR to LaTeX, and evidence-based face-match thresholds.">
+<meta property="og:image" content="https://3025.mingly.ai/assets/og.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="bar">
+    <a class="brand" href="/" aria-label="Ethan Coskay, home"><b>ETHAN COSKAY</b><span>Computer Science + AI</span></a>
+    <nav class="nav" id="site-nav" aria-label="Main"><a href="/about/">About</a><a href="/certificates/">Certificates</a><a href="/cornell-xr/" aria-current="page">Cornell XR</a><a href="/hackathons-awards/">Hackathons/Awards</a><a href="/leadership/">Leadership</a><a href="/projects/">Projects</a><a href="/work-experience/">Work Experience</a></nav>
+    <a class="btn btn-primary" href="/assets/Ethan_Coskay_Resume.pdf">Résumé</a>
+    <button class="btn menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+  </div>
+</header>
+<main id="main" class="wrap">
+
+<header class="page-head col">
+  <p class="eyebrow">Cornell XR · Software Lead · Mar 2024 – present</p>
+  <h1>Building software that blends digital and physical worlds</h1>
+  <p class="lede">Cornell XR is a student-led project team, founded in 2024, combining hardware, software and machine learning across haptics, brain-computer interfaces, software, game development and business subteams. I'm a founding member and lead the software team.</p>
+  <div class="ctas"><a class="btn" href="https://cornellxr.com/" rel="noopener">cornellxr.com</a><a class="btn" href="https://cornellxr.com/team/" rel="noopener">Team page</a></div>
+</header>
+
+<section aria-labelledby="xr-role">
+  <div class="stack-lg">
+    <h2 id="xr-role">What leading software means here</h2>
+    <div class="grid-3">
+      <div class="card"><p class="eyebrow">Team</p><p>Lead a team of 5 engineers building real-time vision software for smart glasses.</p></div>
+      <div class="card"><p class="eyebrow">Data</p><p>Designed and manage the MongoDB schema for storing and querying scanned images, improving retrieval speed.</p></div>
+      <div class="card"><p class="eyebrow">Quality</p><p>Improve recognition accuracy with targeted Python and OpenCV changes, and validate thresholds with measured error rates.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="ocr" aria-labelledby="xr-ocr">
+  <div class="stack-lg">
+    <div class="col stack-sm"><p class="eyebrow">Project · Meta glasses</p><h2 id="xr-ocr">Scan a page, get a formatted LaTeX file</h2>
+      <p>A real-time OCR pipeline for a document-scanning app on Meta glasses that converts scanned images directly into formatted LaTeX.</p></div>
+    <figure>
+      <p class="concept">Simplified conceptual representation</p>
+      <ol class="flow" aria-label="OCR to LaTeX pipeline"><li>Glasses camera capture</li><li>Image stored in MongoDB</li><li>Preprocess with OpenCV</li><li>OCR text extraction</li><li>Structure into LaTeX</li><li>.tex file</li></ol>
+      <figcaption>Recognition accuracy improves through targeted changes to the document-recognition steps.</figcaption>
+    </figure>
+    <ul class="chips"><li>Python</li><li>OpenCV</li><li>MongoDB</li><li>OCR</li><li>LaTeX</li></ul>
+  </div>
+</section>
+
+<section id="memory" aria-labelledby="xr-mem">
+  <div class="stack-lg">
+    <div class="col stack-sm"><p class="eyebrow">Project · Persistent-memory glasses · 2026</p><h2 id="xr-mem">Choosing a face-match threshold with evidence, not a guess</h2>
+      <p>The team's persistent-memory glasses recognize who you're talking to and surface past context. The prototype matched faces with a hardcoded distance threshold. I made it configurable and measured what each value costs.</p></div>
+    <figure>
+      <p class="concept">Measured on 6,000 LFW face-verification pairs</p>
+      <div class="svgbox"><svg viewBox="0 0 560 230" width="100%" role="img" aria-labelledby="frr-t frr-d" style="max-width:40rem">
+  <title id="frr-t">False rejection rate by match threshold</title>
+  <desc id="frr-d">At a threshold of 1.0, 7.2 percent of same-person pairs were wrongly rejected. At 1.5, 2.77 percent were, while different-person pairs were still accepted 0.00 percent of the time.</desc>
+  <style>.lbl{fill:var(--muted);font-size:12px}.val{fill:var(--ink);font-size:13px;font-weight:500}</style>
+  <line x1="120.0" x2="120.0" y1="30" y2="180" stroke="var(--line)"/><text x="120.0" y="196" text-anchor="middle" class="lbl">0%</text><line x1="204.0" x2="204.0" y1="30" y2="180" stroke="var(--line)"/><text x="204.0" y="196" text-anchor="middle" class="lbl">2%</text><line x1="288.0" x2="288.0" y1="30" y2="180" stroke="var(--line)"/><text x="288.0" y="196" text-anchor="middle" class="lbl">4%</text><line x1="372.0" x2="372.0" y1="30" y2="180" stroke="var(--line)"/><text x="372.0" y="196" text-anchor="middle" class="lbl">6%</text><line x1="456.0" x2="456.0" y1="30" y2="180" stroke="var(--line)"/><text x="456.0" y="196" text-anchor="middle" class="lbl">8%</text><text x="110" y="62" text-anchor="end" class="lbl">Threshold 1.0</text><rect x="120" y="40" width="302.4" height="32" rx="4" fill="var(--dim)"/><text x="430.4" y="62" class="val">7.2%</text><text x="110" y="132" text-anchor="end" class="lbl">Threshold 1.5</text><rect x="120" y="110" width="116.3" height="32" rx="4" fill="var(--accent)"/><text x="244.3" y="132" class="val">2.77%</text>
+  <text x="120" y="216" class="lbl">Same-person pairs wrongly rejected (false rejection rate)</text>
+</svg></div>
+      <figcaption>Raising the threshold from 1.0 to 1.5 cut wrongly rejected same-person pairs from 7.2% to 2.77%, while still accepting 0.00% of 2,957 different-person pairs.</figcaption>
+    </figure>
+    <div class="grid-2">
+      <div class="card"><h3>What I changed</h3><p>Replaced the hardcoded threshold with a setting, added boundary tests just inside and outside it, and wrote a sweep script reporting error rates and cross-validated operating points.</p></div>
+      <div class="card"><h3>Why it matters</h3><p>A wrong match on memory glasses shows the wrong person's history. Picking the threshold from measured error rates makes that tradeoff explicit.</p></div>
+    </div>
+    <p><span class="badge">In review</span> <a href="https://github.com/CUXR/Persistent-Memory/pull/37" rel="noopener">Pull request on GitHub →</a></p>
+  </div>
+</section>
+
+</main>
+<footer class="site-foot">
+  <div class="in">
+    <div class="stack-sm">
+      <p><b>Ethan Coskay</b> · Cornell Engineering, B.S. Computer Science, minor in Artificial Intelligence · May 2027</p>
+      <p>Email <span class="mono" id="foot-email" style="user-select:all">enc33@cornell.edu</span> <button class="copy" type="button" data-copy="enc33@cornell.edu" data-target="#foot-email">Copy</button></p>
+    </div>
+    <div class="links">
+      <a href="/assets/Ethan_Coskay_Resume.pdf">Résumé (PDF)</a>
+      <a href="https://github.com/EcSky19" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/ethan-coskay/" rel="noopener">LinkedIn</a>
+      <a href="/projects/">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

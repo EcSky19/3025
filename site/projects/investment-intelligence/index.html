@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Investment Intelligence System · Ethan Coskay</title>
+<meta name="description" content="Case study: a research system that reconciles six market-analysis engines into explainable, evidence-first reports.">
+<link rel="canonical" href="https://3025.mingly.ai/projects/investment-intelligence/">
+<meta property="og:title" content="Investment Intelligence System · Ethan Coskay">
+<meta property="og:description" content="Case study: a research system that reconciles six market-analysis engines into explainable, evidence-first reports.">
+<meta property="og:image" content="https://3025.mingly.ai/assets/og.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="bar">
+    <a class="brand" href="/" aria-label="Ethan Coskay, home"><b>ETHAN COSKAY</b><span>Computer Science + AI</span></a>
+    <nav class="nav" id="site-nav" aria-label="Main"><a href="/about/">About</a><a href="/certificates/">Certificates</a><a href="/cornell-xr/">Cornell XR</a><a href="/hackathons-awards/">Hackathons/Awards</a><a href="/leadership/">Leadership</a><a href="/projects/" aria-current="page">Projects</a><a href="/work-experience/">Work Experience</a></nav>
+    <a class="btn btn-primary" href="/assets/Ethan_Coskay_Resume.pdf">Résumé</a>
+    <button class="btn menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+  </div>
+</header>
+<main id="main" class="wrap">
+
+<header class="page-head col">
+  <p class="eyebrow">Personal project · Nov 2025 – present · Research prototype</p>
+  <h1>Investment Intelligence System</h1>
+  <p class="lede">Combining six kinds of market evidence into explainable research, without hiding uncertainty or collapsing everything into one score.</p>
+  <div class="ctas"><a class="btn" href="https://github.com/EcSky19/InvestmentIntelligenceSystem" rel="noopener">View on GitHub</a></div>
+</header>
+
+<section aria-labelledby="iis-p">
+  <div class="col stack">
+    <p class="eyebrow">The problem</p>
+    <h2 id="iis-p">Signals disagree, and a single score hides it</h2>
+    <p>Trend, fundamentals, institutional flow, technicals, tape and sentiment often point in different directions. Averaging them into one number throws away the most useful information: where they conflict, and why.</p>
+  </div>
+</section>
+
+<section aria-labelledby="iis-a">
+  <div class="stack-lg">
+    <div class="col stack-sm"><p class="eyebrow">Architecture</p><h2 id="iis-a">Evidence first, explanation second</h2></div>
+    <figure>
+      <p class="concept">Target architecture · simplified</p>
+      <ol class="flow" aria-label="Investment Intelligence System pipeline"><li>Market data</li><li>Validate + normalize</li><li>Six engines</li><li>Standardized results</li><li>Conflict resolution</li><li>Scenarios + confidence</li><li>Explained report</li></ol>
+      <figcaption>Deterministic calculations produce the evidence. The language layer only explains and organizes it, and never invents numbers.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section aria-labelledby="iis-e">
+  <div class="stack-lg">
+    <div class="col stack-sm"><p class="eyebrow">The six engines</p><h2 id="iis-e">Select an engine</h2>
+      <p class="muted">Every engine returns the same shape: direction, strength, evidence, time horizon, data quality and what would invalidate it.</p></div>
+    <div class="picker" data-picker="tech">
+  <ol class="picks"><li><button class="pick" type="button" data-id="trend" aria-expanded="false" aria-controls="pd-tech"><span class="k">01</span><span>Trend and regime</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="fund" aria-expanded="false" aria-controls="pd-tech"><span class="k">02</span><span>Fundamentals and sector</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="flow" aria-expanded="false" aria-controls="pd-tech"><span class="k">03</span><span>Institutional flow</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="tech" aria-expanded="false" aria-controls="pd-tech"><span class="k">04</span><span>Technical signals</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="tape" aria-expanded="false" aria-controls="pd-tech"><span class="k">05</span><span>Tape analysis</span><span class="chev" aria-hidden="true">+</span></button></li><li><button class="pick" type="button" data-id="sent" aria-expanded="false" aria-controls="pd-tech"><span class="k">06</span><span>News and sentiment</span><span class="chev" aria-hidden="true">+</span></button></li></ol>
+  <div class="detail" id="pd-tech" aria-live="polite">
+    <p class="eyebrow" data-f="step"></p>
+    <h3 data-f="title"></h3>
+    <dl class="kv"><dt>What it does</dt><dd data-f="a"></dd><dt>Why it matters</dt><dd data-f="b"></dd></dl>
+  </div>
+  <script type="application/json">[{"id": "trend", "k": "01", "title": "Trend and regime", "a": "Detects whether a stock is trending, ranging or changing regime.", "b": "Other signals mean different things in different regimes, so this context comes first."}, {"id": "fund", "k": "02", "title": "Fundamentals and sector", "a": "Structures company and sector research.", "b": "Grounds the analysis in the business, not only the price chart. Output must be tied to verified financial data."}, {"id": "flow", "k": "03", "title": "Institutional flow", "a": "Infers whether large institutions are accumulating or distributing.", "b": "Big participants move prices; their footprint is evidence that price alone hides."}, {"id": "tech", "k": "04", "title": "Technical signals", "a": "Computes moving averages, RSI, MACD, Bollinger Bands and support/resistance into a weighted rating.", "b": "A working prototype. RSI and MACD are not independent, so the synthesis must not double-count them."}, {"id": "tape", "k": "05", "title": "Tape analysis", "a": "Turns time-and-sales data into microstructure features, a directional score and a next-session playbook.", "b": "A working prototype that reads how trades actually printed, not just closing prices."}, {"id": "sent", "k": "06", "title": "News and sentiment", "a": "Models how news and sentiment shift the outlook.", "b": "Planned. Sentiment is fast-moving, so data freshness is weighed explicitly."}]</script>
+</div>
+  </div>
+</section>
+
+<section aria-labelledby="iis-d">
+  <div class="stack-lg">
+    <h2 id="iis-d">Design decisions</h2>
+    <div class="grid-2">
+      <div class="card"><h3>One result contract for every engine</h3><p>A shared schema lets the synthesis compare engines directly, and makes a missing or low-quality input visible instead of silent.</p></div>
+      <div class="card"><h3>Treat disagreement as data</h3><p>Conflicts are surfaced and weighed by time horizon, signal dependence and data freshness, not averaged away.</p></div>
+      <div class="card"><h3>Constrain the language layer</h3><p>The explanation step can only use numbers the engines produced, so the report stays traceable to evidence.</p></div>
+      <div class="card"><h3>Be honest about status</h3><p>Heuristic scores are not calibrated probabilities. The system is a research tool, not a trading system, and has not yet shown predictive edge.</p></div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="iis-s">
+  <div class="stack-lg">
+    <h2 id="iis-s">Where it stands</h2>
+    <div class="grid-3">
+      <div class="card"><span class="badge ok">Working prototype</span><h3>Technical signals</h3><p class="muted">Browser-based indicator engine with a weighted rating.</p></div>
+      <div class="card"><span class="badge ok">Working prototype</span><h3>Tape analysis</h3><p class="muted">Time-and-sales features, scenario weights and a next-session playbook.</p></div>
+      <div class="card"><span class="badge warn">In design</span><h3>Synthesis layer</h3><p class="muted">Standard interface, conflict resolution, orchestration and historical validation.</p></div>
+    </div>
+    <ul class="chips"><li>Python</li><li>JavaScript</li><li>React/JSX</li><li>Market-data APIs</li><li>CSV ingestion</li></ul>
+  </div>
+</section>
+<p class="notice" style="margin-top:2rem">Research project. Nothing here is investment advice.</p>
+
+</main>
+<footer class="site-foot">
+  <div class="in">
+    <div class="stack-sm">
+      <p><b>Ethan Coskay</b> · Cornell Engineering, B.S. Computer Science, minor in Artificial Intelligence · May 2027</p>
+      <p>Email <span class="mono" id="foot-email" style="user-select:all">enc33@cornell.edu</span> <button class="copy" type="button" data-copy="enc33@cornell.edu" data-target="#foot-email">Copy</button></p>
+    </div>
+    <div class="links">
+      <a href="/assets/Ethan_Coskay_Resume.pdf">Résumé (PDF)</a>
+      <a href="https://github.com/EcSky19" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/ethan-coskay/" rel="noopener">LinkedIn</a>
+      <a href="/projects/">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>

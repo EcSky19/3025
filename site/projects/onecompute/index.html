@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OneCompute · Ethan Coskay</title>
+<meta name="description" content="Case study: OneCompute, a 3rd-place hackathon build turning idle employee devices into an opt-in, sandboxed compute network.">
+<link rel="canonical" href="https://3025.mingly.ai/projects/onecompute/">
+<meta property="og:title" content="OneCompute · Ethan Coskay">
+<meta property="og:description" content="Case study: OneCompute, a 3rd-place hackathon build turning idle employee devices into an opt-in, sandboxed compute network.">
+<meta property="og:image" content="https://3025.mingly.ai/assets/og.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-head">
+  <div class="bar">
+    <a class="brand" href="/" aria-label="Ethan Coskay, home"><b>ETHAN COSKAY</b><span>Computer Science + AI</span></a>
+    <nav class="nav" id="site-nav" aria-label="Main"><a href="/about/">About</a><a href="/certificates/">Certificates</a><a href="/cornell-xr/">Cornell XR</a><a href="/hackathons-awards/">Hackathons/Awards</a><a href="/leadership/">Leadership</a><a href="/projects/" aria-current="page">Projects</a><a href="/work-experience/">Work Experience</a></nav>
+    <a class="btn btn-primary" href="/assets/Ethan_Coskay_Resume.pdf">Résumé</a>
+    <button class="btn menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+  </div>
+</header>
+<main id="main" class="wrap">
+
+<style>.ocs{opacity:.45}.ocs.on{opacity:1}.ocs[aria-current="step"]{border-color:var(--accent)}
+.ocl{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.6rem}
+@media (max-width:820px){.ocl{grid-template-columns:1fr}}</style>
+<header class="page-head col">
+  <p class="eyebrow">Microsoft Intern Week Hackathon · Summer 2026 · 3rd place of 1,200+</p>
+  <h1>OneCompute</h1>
+  <p class="lede">A privacy-conscious platform that turns underused employee devices into an opt-in compute network. Built by three people in two days.</p>
+</header>
+
+<section aria-labelledby="oc-r">
+  <div class="stack-lg">
+    <div class="facts">
+      <div class="fact"><p class="n">3rd</p><p class="d">place of 1,200+ participants</p></div>
+      <div class="fact"><p class="n">2</p><p class="d">days, 3-person team</p></div>
+      <div class="fact"><p class="n">90</p><p class="d">source files validated</p></div>
+      <div class="fact"><p class="n">159</p><p class="d">automated tests</p></div>
+    </div>
+    <div class="col stack-sm"><p class="eyebrow">My role</p><h2 id="oc-r">I owned the demo, the primary judged artifact</h2>
+    <p>End-to-end demo and product experience: the story judges saw, the live dashboard, and a 4–5 minute demo video whose zoom effects I timed to live UI events with ffmpeg.</p></div>
+  </div>
+</section>
+
+<section aria-labelledby="oc-f">
+  <div class="stack-lg">
+    <div class="col stack-sm"><p class="eyebrow">How a job flows</p><h2 id="oc-f">Step through the lifecycle</h2></div>
+    <div data-stepper class="stack">
+      <ol class="ocl"><li class="card ocs" data-step="Opt in"><p class="eyebrow">Step 1</p><h3>Opt in</h3><p class="muted">An employee chooses to share an idle device. Nothing joins the network without consent.</p></li><li class="card ocs" data-step="Submit a job"><p class="eyebrow">Step 2</p><h3>Submit a job</h3><p class="muted">A workload is sent to the FastAPI orchestrator.</p></li><li class="card ocs" data-step="Sign it"><p class="eyebrow">Step 3</p><h3>Sign it</h3><p class="muted">The job is signed, so a device only runs work it can verify.</p></li><li class="card ocs" data-step="Run in a sandbox"><p class="eyebrow">Step 4</p><h3>Run in a sandbox</h3><p class="muted">The desktop client executes the job sandboxed, isolated from the employee&#x27;s files.</p></li><li class="card ocs" data-step="Watch it live"><p class="eyebrow">Step 5</p><h3>Watch it live</h3><p class="muted">The dashboard shows devices, workloads and capacity in real time.</p></li></ol>
+      <div class="ctas" style="align-items:center"><button class="btn" type="button" data-prev>← Previous</button><button class="btn btn-primary" type="button" data-next>Next →</button>
+        <p class="mono muted" data-pos role="status" style="font-size:.85rem"></p></div>
+      <p class="concept">Simplified conceptual representation</p>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="oc-b">
+  <div class="stack-lg">
+    <h2 id="oc-b">What we built</h2>
+    <div class="grid-3">
+      <div class="card"><h3>Orchestrator</h3><p class="muted">FastAPI service handling signed, sandboxed job execution.</p></div>
+      <div class="card"><h3>Desktop client</h3><p class="muted">Native Windows app with custom taskbar and system tray integration.</p></div>
+      <div class="card"><h3>Live dashboard</h3><p class="muted">Real-time view of devices, workloads and compute capacity.</p></div>
+    </div>
+    <ul class="chips"><li>Python</li><li>FastAPI</li><li>Windows desktop</li><li>ffmpeg</li><li>Automated testing</li></ul>
+    <p><a href="https://github.com/Aditya-Katkuri/OneCompute" rel="noopener">Project repository on GitHub →</a></p>
+  </div>
+</section>
+
+</main>
+<footer class="site-foot">
+  <div class="in">
+    <div class="stack-sm">
+      <p><b>Ethan Coskay</b> · Cornell Engineering, B.S. Computer Science, minor in Artificial Intelligence · May 2027</p>
+      <p>Email <span class="mono" id="foot-email" style="user-select:all">enc33@cornell.edu</span> <button class="copy" type="button" data-copy="enc33@cornell.edu" data-target="#foot-email">Copy</button></p>
+    </div>
+    <div class="links">
+      <a href="/assets/Ethan_Coskay_Resume.pdf">Résumé (PDF)</a>
+      <a href="https://github.com/EcSky19" rel="noopener">GitHub</a>
+      <a href="https://www.linkedin.com/in/ethan-coskay/" rel="noopener">LinkedIn</a>
+      <a href="/projects/">Projects</a>
+    </div>
+  </div>
+</footer>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
