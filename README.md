@@ -12,7 +12,7 @@ My professional portfolio website for Cornell's ENGRC 3025: Creating & Communica
 | [About](https://3025.mingly.ai/about/) | Career direction, how I engineer, the teams I work best on, Cornell CS + AI coursework, tools |
 | [Certificates](https://3025.mingly.ai/certificates/) | Cornell degree and Selander Center leadership certification and badges, Palantir, Columbia, IBM and Wharton certificates, each with a verification link |
 | [Cornell XR](https://3025.mingly.ai/cornell-xr/) | Software Lead role, smart-glasses OCR to LaTeX pipeline, and face-match threshold validation with measured error rates |
-| [Hackathons/Awards](https://3025.mingly.ai/hackathons-awards/) | OneCompute, 3rd place of 1,200+ at the Microsoft Intern Week Hackathon |
+| [Hackathons/Awards](https://3025.mingly.ai/hackathons-awards/) | OneCompute, 3rd place of 1,200+ at the Microsoft Global Intern Week Hackathon |
 | [Leadership](https://3025.mingly.ai/leadership/) | CS 1110 teaching assistant, Selander Center program, Cornell XR, Alpha Sigma Phi |
 | [Projects](https://3025.mingly.ai/projects/) | Filterable case studies |
 | [Work Experience](https://3025.mingly.ai/work-experience/) | Microsoft, Davidson Kempner, the LinkedIn – Cornell Bowers CIS Internship and Helmes: problem, what I owned, result |
