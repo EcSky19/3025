@@ -25,11 +25,17 @@
 </header>
 <main id="main" class="wrap">
 
-<header class="page-head col">
+<style>.xr-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.5rem 2.5rem;align-items:start}
+.xr-head .logo{width:clamp(9rem,20vw,13rem);margin-top:.25rem}
+@media (max-width:720px){.xr-head{grid-template-columns:1fr}.xr-head .logo{order:-1;width:9rem}}</style>
+<header class="page-head xr-head">
+ <div class="col stack">
   <p class="eyebrow">Cornell XR · Software Lead · Mar 2024 – present</p>
   <h1>Building software that blends digital and physical worlds</h1>
   <p class="lede">Cornell XR is a student-led project team, founded in 2024, combining hardware, software and machine learning across haptics, brain-computer interfaces, software, game development and business subteams. I'm a founding member and lead the software team.</p>
   <div class="ctas"><a class="btn" href="https://cornellxr.com/" rel="noopener">cornellxr.com</a><a class="btn" href="https://cornellxr.com/team/" rel="noopener">Team page</a></div>
+ </div>
+ <img class="logo" src="/assets/cuxr-logo.png" width="306" height="108" alt="CUXR, Cornell XR logo">
 </header>
 
 <section aria-labelledby="xr-role">
