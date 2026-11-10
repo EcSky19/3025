@@ -119,6 +119,9 @@ svg text{font-family:var(--f-mono)}
 .role{display:grid;grid-template-columns:9.5rem minmax(0,1fr);gap:1.25rem}
 @media (max-width:720px){.role{grid-template-columns:1fr;gap:.4rem}}
 .role .when{font:500 .8rem var(--f-mono);color:var(--muted);padding-top:1.25rem}
+.role .when{display:grid;gap:.75rem;align-content:start}
+.co-logo{width:64px;height:64px;border-radius:12px;border:1px solid var(--line);background:#fff;object-fit:cover}
+@media (max-width:720px){.role .when{grid-template-columns:auto 1fr;align-items:center}.role .when .co-logo{order:-1;width:48px;height:48px;border-radius:10px}}
 @media (max-width:720px){.role .when{padding-top:0}}
 .path{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;list-style:none;margin:0;padding:0;counter-reset:p}
 @media (max-width:720px){.path{grid-template-columns:1fr}}
